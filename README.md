@@ -1,5 +1,5 @@
 # Neural Network Charity Analysis
-## Overview 
+## OVERVIEW
 This analysis will use neural networks with a binary classifier that will attempt to predict whether applicants will be successful if funded by a charitable organization, Alphabet Soup.
 
 ## RESULTS 
@@ -57,10 +57,11 @@ X_test_scaled = X_scaler.transform(X_test)
 ```
 
 ### Compiling, Training, and Evaluating the Model
+Results were exported to two HDF5 files.  AlphabetSoupCharity.h5 and AlphabetSoupCharity_Optimazation.h5
+For Deliverable 2 and 3 Each attempt created checkpoint files and can be found https://github.com/linb960/Neural_Network_Charity_Analysis/tree/main/checkpoints
 
-Each attempt created checkpoint files and an 
-
-#### Initial Attempt in file https://github.com/linb960/Neural_Network_Charity_Analysis/blob/main/AlphabetSoupCharity_Optimazation.ipynb
+#### Deliverable 2 Attempt https://github.com/linb960/Neural_Network_Charity_Analysis/blob/main/AlphabetSoupCharity_Optimazation.ipynb
+With 8 nodes in the first hidden layer and 5 nodes in the second hidden layer.  The Activation used is Relu in the hidden layers and Sigmoid in the output. 
 ```
 # Define the model - deep neural net
 number_input_features = len(X_train[0])
@@ -97,8 +98,135 @@ Total params: 403
 Trainable params: 403
 Non-trainable params: 0
 ```
-With 8 nodes in the first hidden layer and 5 nodes in the second hidden layer the output 
-How many neurons, layers, and activation functions did you select for your neural network model, and why?
-Were you able to achieve the target model performance?
-What steps did you take to try and increase model performance?
-Summary: Summarize the overall results of the deep learning model. Include a recommendation for how a different model could solve this classification problem, and explain your recommendation.
+__Evaluating the model shows a 72.73% accuracy:__
+```
+model_loss, model_accuracy = nn.evaluate(X_test_scaled,y_test,verbose=2)
+print(f"Loss: {model_loss}, Accuracy: {model_accuracy}")
+
+8575/1 - 0s - loss: 0.5303 - accuracy: 0.7273
+Loss: 0.5555491790618563, Accuracy: 0.7273469567298889
+```
+
+
+#### Second Attempt https://github.com/linb960/Neural_Network_Charity_Analysis/blob/main/AlphabetSoupCharity_Optimazation.ipynb. Line 20
+
+Nodes are changed to 16 in first hidden layer, 8 nodes in the second hidden layer and a third layer with 6 nodes is also added.  The Activation used is still Relu in the hidden layers and Sigmoid in the output.
+```
+# Define the model - deep neural net
+number_input_features = len(X_train[0])
+hidden_nodes_layer1 =  16
+hidden_nodes_layer2 = 8
+hidden_nodes_layer3 = 6
+
+nn = tf.keras.models.Sequential()
+
+# First hidden layer
+nn.add(
+    tf.keras.layers.Dense(units=hidden_nodes_layer1, input_dim=number_input_features, activation="relu")
+)
+
+# Second hidden layer
+nn.add(tf.keras.layers.Dense(units=hidden_nodes_layer2, activation="relu"))
+
+# Third hidden layer
+nn.add(tf.keras.layers.Dense(units=hidden_nodes_layer3, activation="relu"))
+
+# Output layer
+nn.add(tf.keras.layers.Dense(units=1, activation="sigmoid"))
+
+# Check the structure of the model
+nn.summary()
+
+
+Model: "sequential_1"
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #   
+=================================================================
+dense_3 (Dense)              (None, 16)                704       
+_________________________________________________________________
+dense_4 (Dense)              (None, 8)                 136       
+_________________________________________________________________
+dense_5 (Dense)              (None, 6)                 54        
+_________________________________________________________________
+dense_6 (Dense)              (None, 1)                 7         
+=================================================================
+Total params: 901
+Trainable params: 901
+Non-trainable params: 0
+```
+__Evaluating the model shows a 73.06% accuracy:__
+```
+model_loss, model_accuracy = nn.evaluate(X_test_scaled,y_test,verbose=2)
+print(f"Loss: {model_loss}, Accuracy: {model_accuracy}")
+
+8575/1 - 0s - loss: 0.5063 - accuracy: 0.7306
+Loss: 0.5545681785529278, Accuracy: 0.7306122183799744
+```
+#### Second Attempt https://github.com/linb960/Neural_Network_Charity_Analysis/blob/main/AlphabetSoupCharity_Optimazation_Attempt3.ipynb
+
+The number of Nodes and layers stay the same from the second attempt with 16 in first hidden layer, 8 nodes in the second hidden layer and a third layer with 6 nodes.  The Activation used changes to Tanh in the hidden layers and stays Sigmoid in the output.
+
+__Additional change__ comes by changing the number of features.  By Binning the APPLICATION_TYPE's if there are less than 1000 instead of less than 500 we reduced number of columns by 4 as seen here:
+```
+T3       27037
+Other     2266
+T4        1542
+T6        1216
+T5        1173
+T19       1065
+Name: APPLICATION_TYPE, dtype: int64
+```
+Once this was done the model was defined:
+```
+# Define the model - deep neural net
+number_input_features = len(X_train[0])
+hidden_nodes_layer1 =  16
+hidden_nodes_layer2 = 8
+hidden_nodes_layer3 = 6
+
+nn = tf.keras.models.Sequential()
+
+# First hidden layer
+nn.add(
+    tf.keras.layers.Dense(units=hidden_nodes_layer1, input_dim=number_input_features, activation="tanh")
+)
+
+# Second hidden layer
+nn.add(tf.keras.layers.Dense(units=hidden_nodes_layer2, activation="tanh"))
+
+# Third hidden layer
+nn.add(tf.keras.layers.Dense(units=hidden_nodes_layer3, activation="tanh"))
+
+# Output layer
+nn.add(tf.keras.layers.Dense(units=1, activation="sigmoid"))
+
+# Check the structure of the model
+nn.summary()
+
+
+Model: "sequential_1"
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #   
+=================================================================
+dense_3 (Dense)              (None, 16)                704       
+_________________________________________________________________
+dense_4 (Dense)              (None, 8)                 136       
+_________________________________________________________________
+dense_5 (Dense)              (None, 6)                 54        
+_________________________________________________________________
+dense_6 (Dense)              (None, 1)                 7         
+=================================================================
+Total params: 901
+Trainable params: 901
+Non-trainable params: 0
+```
+__Evaluating the model shows a 73.03% accuracy:__
+```
+model_loss, model_accuracy = nn.evaluate(X_test_scaled,y_test,verbose=2)
+print(f"Loss: {model_loss}, Accuracy: {model_accuracy}")
+
+8575/1 - 0s - loss: 0.5037 - accuracy: 0.7303
+Loss: 0.5566521305697305, Accuracy: 0.7302623987197876
+```
+
+### Summary

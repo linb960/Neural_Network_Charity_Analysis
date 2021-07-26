@@ -56,7 +56,48 @@ X_train_scaled = X_scaler.transform(X_train)
 X_test_scaled = X_scaler.transform(X_test)
 ```
 
-Compiling, Training, and Evaluating the Model
+### Compiling, Training, and Evaluating the Model
+
+Each attempt created checkpoint files and an 
+
+#### Initial Attempt in file https://github.com/linb960/Neural_Network_Charity_Analysis/blob/main/AlphabetSoupCharity_Optimazation.ipynb
+```
+# Define the model - deep neural net
+number_input_features = len(X_train[0])
+hidden_nodes_layer1 =  8
+hidden_nodes_layer2 = 5
+
+nn = tf.keras.models.Sequential()
+
+# First hidden layer
+nn.add(
+    tf.keras.layers.Dense(units=hidden_nodes_layer1, input_dim=number_input_features, activation="relu")
+)
+
+# Second hidden layer
+nn.add(tf.keras.layers.Dense(units=hidden_nodes_layer2, activation="relu"))
+
+
+# Output layer
+nn.add(tf.keras.layers.Dense(units=1, activation="sigmoid"))
+
+# Check the structure of the model
+nn.summary()
+Model: "sequential"
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #   
+=================================================================
+dense (Dense)                (None, 8)                 352       
+_________________________________________________________________
+dense_1 (Dense)              (None, 5)                 45        
+_________________________________________________________________
+dense_2 (Dense)              (None, 1)                 6         
+=================================================================
+Total params: 403
+Trainable params: 403
+Non-trainable params: 0
+```
+With 8 nodes in the first hidden layer and 5 nodes in the second hidden layer the output 
 How many neurons, layers, and activation functions did you select for your neural network model, and why?
 Were you able to achieve the target model performance?
 What steps did you take to try and increase model performance?

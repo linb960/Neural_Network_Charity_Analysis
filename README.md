@@ -162,7 +162,7 @@ print(f"Loss: {model_loss}, Accuracy: {model_accuracy}")
 8575/1 - 0s - loss: 0.5063 - accuracy: 0.7306
 Loss: 0.5545681785529278, Accuracy: 0.7306122183799744
 ```
-#### Second Attempt https://github.com/linb960/Neural_Network_Charity_Analysis/blob/main/AlphabetSoupCharity_Optimazation_Attempt3.ipynb
+#### Third Attempt https://github.com/linb960/Neural_Network_Charity_Analysis/blob/main/AlphabetSoupCharity_Optimazation_Attempt3.ipynb
 
 The number of Nodes and layers stay the same from the second attempt with 16 in first hidden layer, 8 nodes in the second hidden layer and a third layer with 6 nodes.  The Activation used changes to Tanh in the hidden layers and stays Sigmoid in the output.
 
@@ -230,3 +230,6 @@ Loss: 0.5566521305697305, Accuracy: 0.7302623987197876
 ```
 
 ### Summary
+Using the different models did not significantly change the results of this model.  With less than 75% prediction rate of whether an organization will be successful with the moeny provided by Alphabet Soup, the Alphabet Soup takes a risk of funding 25% of unsuccessful projects.  Donors to Alphabet soup may feel this is not a good place to donate money if they know about this information.
+<br>
+To potentially help Alphabet Soup gain a higher prediction rate, instead of just binning some of the information, it might be better to look at processing the data with only the 17326 organizations Classified as C1000 and the 27037 entries of Application type T3.  This may glean more accurate predictions.  Also, the rest of the data, sans C1000 and T3 entries, could be run on it's own, although then some binning would be needed.  By splitting the data this way Alphabet soup could hopefully predict more accurately and stave off investing in organizations that won't be successful.
